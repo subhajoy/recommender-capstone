@@ -1,0 +1,6 @@
+*.csv
+*.dat
+*.score
+*.model
+*.train
+*.test
