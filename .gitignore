@@ -5,3 +5,4 @@
 *.model
 *.train
 *.test
+tmp_*
