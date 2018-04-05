@@ -1,3 +1,4 @@
+*.pyc
 *.csv
 *.json
 *.dat
@@ -5,4 +6,4 @@
 *.model
 *.train
 *.test
-tmp_*
+tmp*
