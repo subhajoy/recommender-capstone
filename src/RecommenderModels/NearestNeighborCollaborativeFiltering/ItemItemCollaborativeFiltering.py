@@ -77,24 +77,24 @@ class ItemItemCollaborativeFiltering(RecommenderModelAbstract):
         print("\tComplete!")
         return model
 
-    def Recommendation(self, user, nNeighbors, d_u, model):
-        score_num = 0
-        score_den = 0
+    def Recommendation(self, user, d_u, model):
         item_u, rating_u = zip(*d_u[user]['item_rating'])
         predictedScores = []
         for candidate in self.item_list:
+            score_num = 0
+            score_den = 0
             if candidate in item_u:
                 continue
             correlations = model[candidate]
             for i in range(len(item_u)):
                 score_num += rating_u[i]*correlations.get(item_u[i],0)
-                score_den += correlations.get(item_u[i],0)
-            if(score_den!=0):
-                score = score_num/score_den
-            else:
-                score = 0
-            predictedScores.append((candidate, score))
-        predictedScores.sort(reverse = True)
+            #     score_den += correlations.get(item_u[i],0)
+            # if(score_den!=0):
+            #     score = score_num/score_den
+            # else:
+            #     score = 0
+            predictedScores.append((candidate, score_num))
+        predictedScores.sort(key = lambda x: x[1], reverse = True)
         return predictedScores
     # ------------------------------------------------------------------------ #
     # ------------------------------------------------------------------------ #
@@ -130,12 +130,12 @@ class ItemItemCollaborativeFiltering(RecommenderModelAbstract):
     def dataFormatConversion(self):
         pass
 
-    def modelFitting(self):
-        self.model = self.buildModel()
+    def modelFitting(self, nNeighbors):
+        self.model = self.buildModel(nNeighbors)
 
     def doPredictions(self):
         for user in self.user_list:
-            l = self.Recommendation(user, nNeighbors=20, \
+            l = self.Recommendation(user, \
                     d_u=self.dict_item_rating_listed_per_user, model=self.model)
             self.predicted_df = self.predicted_df.append({'user':user, \
                     'pred_item_rating':l}, ignore_index=True)

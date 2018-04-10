@@ -6,4 +6,4 @@
 *.model
 *.train
 *.test
-tmp*
+*tmp*
